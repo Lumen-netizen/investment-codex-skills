@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deep-Dive Investment Analysis"
+  short_description: "Create investment IC memo reports"
+  default_prompt: "Use this skill to analyze a ticker or asset and produce a professional investment committee memo with evidence, charts, and a Buy or Pass verdict."

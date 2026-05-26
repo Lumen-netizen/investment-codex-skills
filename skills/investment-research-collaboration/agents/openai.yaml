@@ -1,0 +1,4 @@
+interface:
+  display_name: "Investment Research Collaboration"
+  short_description: "Guide branching investment research"
+  default_prompt: "Use this skill to structure an investment research discussion with preparation, branching prompts, verification loops, and thesis-building checkpoints."
