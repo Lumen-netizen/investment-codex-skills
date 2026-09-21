@@ -1,4 +1,4 @@
 interface:
   display_name: "Deep-Dive Investment Analysis"
-  short_description: "Create investment IC memo reports"
-  default_prompt: "Use this skill to analyze a ticker or asset and produce a professional investment committee memo with evidence, charts, and a Buy or Pass verdict."
+  short_description: "Handbook-based valuation and Chinese Buy/Pass memos."
+  default_prompt: "Use $deep-dive-investment-analysis to research this investment using my current valuation handbook, assess evidence and counterarguments, and deliver a finished Chinese IC Memo for Buy or a Pass report as a Word document unless I specify another format."

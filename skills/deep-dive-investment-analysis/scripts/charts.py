@@ -5,11 +5,14 @@ Chart Generation Utilities for IC Memo Reports
 Usage: python3 charts.py <chartType> <dataJsonPath> <outputPngPath>
 
 Chart Types:
-  hurdle-scorecard  — Pass/Fail scorecard for 5 hurdles
   financial-trends  — Multi-year line/bar chart for revenue, FCF, ROIC
   valuation-compare — Bar chart comparing current vs intrinsic value or peer P/E
   scenario-payoff   — Scenario payoff map (bull/base/bear)
   risk-dashboard    — Horizontal bar chart of risk factors
+  revenue-segments  — Revenue segment stacked area
+  geo-revenue       — Geographic revenue stacked bar
+  dcf-heatmap       — DCF sensitivity heatmap
+  football-field    — Valuation ranges by method
 
 IMPORTANT: All chart text (titles, labels, legends, axis) MUST be in English.
 Chinese characters will render as garbled squares due to missing CJK fonts.
@@ -137,55 +140,7 @@ def verify_no_cjk(data, path="root"):
             verify_no_cjk(v, f"{path}[{i}]")
 
 
-# ─── Chart 1: Hurdle Scorecard ───
-
-def generate_hurdle_scorecard(data, output_path):
-    """Horizontal bar scorecard showing Pass/Fail for each hurdle."""
-    data = sanitize_data(data)
-    verify_no_cjk(data, "hurdle-scorecard")
-    hurdles = data.get('hurdles', [])
-    title = data.get('title', 'Investment Hurdle Scorecard')
-
-    fig, ax = plt.subplots(figsize=(10, max(4.5, len(hurdles) * 0.9 + 1)))
-    fig.patch.set_facecolor('white')
-    ax.set_facecolor('white')
-
-    names = [h['name'] for h in hurdles]
-    verdicts = [h['verdict'] for h in hurdles]
-    scores_text = [h.get('score', '') for h in hurdles]
-    bar_vals = [85 if v == 'Pass' else 35 for v in verdicts]
-    bar_colors = [COLORS['green'] if v == 'Pass' else COLORS['red'] for v in verdicts]
-
-    y_pos = np.arange(len(names))
-    bar_max = 75  # Reserve right side for score text
-    ax.barh(y_pos, [bar_max]*len(names), height=0.6, color=COLORS['lightGray'], zorder=1)
-    bar_display = [bar_max * 0.95 if v == 'Pass' else bar_max * 0.40 for v in verdicts]
-    ax.barh(y_pos, bar_display, height=0.6, color=bar_colors, zorder=2)
-
-    for i, (v, s) in enumerate(zip(verdicts, scores_text)):
-        ax.text(3, i, v, va='center', ha='left',
-                fontsize=FONT['bar_text'], fontweight='bold', color='white', zorder=3)
-        # Score text placed to the right of bar area, always visible
-        ax.text(bar_max + 2, i, s, va='center', ha='left',
-                fontsize=FONT['bar_text'] - 1, fontweight='bold',
-                color=COLORS['green'] if v == 'Pass' else COLORS['red'], zorder=3)
-
-    ax.set_yticks(y_pos)
-    ax.set_yticklabels(names, fontsize=FONT['tick_label'], color=COLORS['darkText'])
-    ax.invert_yaxis()
-    ax.set_xlim(0, 100)
-    ax.set_xticks([])
-    ax.set_title(title, fontsize=FONT['title'], fontweight='bold', color=COLORS['navy'], pad=18)
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.tick_params(left=False)
-
-    plt.tight_layout()
-    fig.savefig(output_path, dpi=DPI, bbox_inches='tight', facecolor='white')
-    plt.close(fig)
-
-
-# ─── Chart 2: Financial Trends ───
+# ─── Chart 1: Financial Trends ───
 
 def generate_financial_trends(data, output_path):
     """Multi-line chart for financial trends (revenue, FCF, ROIC, etc.)."""
@@ -221,7 +176,7 @@ def generate_financial_trends(data, output_path):
     plt.close(fig)
 
 
-# ─── Chart 3: Valuation Comparison ───
+# ─── Chart 2: Valuation Comparison ───
 
 def generate_valuation_compare(data, output_path):
     """Vertical bar chart comparing valuation metrics across items."""
@@ -261,7 +216,7 @@ def generate_valuation_compare(data, output_path):
     plt.close(fig)
 
 
-# ─── Chart 4: Scenario Payoff Map ───
+# ─── Chart 3: Scenario Payoff Map ───
 
 def generate_scenario_payoff(data, output_path):
     """Horizontal bar chart showing bull/base/bear scenario returns."""
@@ -274,7 +229,7 @@ def generate_scenario_payoff(data, output_path):
     fig.patch.set_facecolor('white')
     ax.set_facecolor('white')
 
-    names = [f"{s['name']}\n({s.get('probability', '?')}%)" for s in scenarios]
+    names = [s['name'] + (f"\n({s['probability']}%)" if s.get('probability') is not None else "") for s in scenarios]
     returns = [s['return_pct'] for s in scenarios]
     colors = [s.get('color', COLORS['green'] if s['return_pct'] >= 0 else COLORS['red']) for s in scenarios]
 
@@ -298,10 +253,10 @@ def generate_scenario_payoff(data, output_path):
     ax.spines['right'].set_visible(False)
     ax.spines['left'].set_visible(False)
     ax.tick_params(left=False)
-    ax.set_xlabel('Expected Return (%)', fontsize=FONT['axis_label'], color=COLORS['gray'])
+    ax.set_xlabel('Scenario Return (%)', fontsize=FONT['axis_label'], color=COLORS['gray'])
     ax.tick_params(axis='x', labelsize=FONT['tick_label'] - 1)
 
-    max_abs = max(abs(r) for r in returns) if returns else 50
+    max_abs = max(1, max(abs(r) for r in returns)) if returns else 50
     ax.set_xlim(-max_abs * 1.5, max_abs * 1.5)
 
     plt.tight_layout()
@@ -309,7 +264,7 @@ def generate_scenario_payoff(data, output_path):
     plt.close(fig)
 
 
-# ─── Chart 5: Risk Dashboard ───
+# ─── Chart 4: Risk Dashboard ───
 
 def generate_risk_dashboard(data, output_path):
     """Horizontal bar chart of risk factors with severity coloring."""
@@ -362,7 +317,7 @@ def generate_risk_dashboard(data, output_path):
     plt.close(fig)
 
 
-# ─── Chart 6: Revenue Segment Stacked Area ───
+# ─── Chart 5: Revenue Segment Stacked Area ───
 
 def generate_revenue_segments(data, output_path):
     """Stacked area chart showing revenue breakdown by business segment over time."""
@@ -397,7 +352,7 @@ def generate_revenue_segments(data, output_path):
     plt.close(fig)
 
 
-# ─── Chart 7: Geographic Revenue Stacked Bar ───
+# ─── Chart 6: Geographic Revenue Stacked Bar ───
 
 def generate_geo_revenue(data, output_path):
     """Stacked bar chart showing revenue breakdown by geography over time."""
@@ -444,7 +399,7 @@ def generate_geo_revenue(data, output_path):
     plt.close(fig)
 
 
-# ─── Chart 8: DCF Sensitivity Heatmap ───
+# ─── Chart 7: DCF Sensitivity Heatmap ───
 
 def generate_dcf_heatmap(data, output_path):
     """Heatmap showing implied share prices across WACC and terminal growth rate assumptions."""
@@ -453,22 +408,35 @@ def generate_dcf_heatmap(data, output_path):
     wacc_rates = data.get('wacc_rates', [])
     growth_rates = data.get('growth_rates', [])
     prices = np.array(data.get('prices', []))
-    current_price = data.get('current_price', 0)
+    current_price = data.get('current_price')
+    currency = data.get('currency', 'USD')
     title = data.get('title', 'DCF Sensitivity — Implied Share Price')
 
-    from matplotlib.colors import TwoSlopeNorm
+    from matplotlib.colors import TwoSlopeNorm, Normalize
 
     fig, ax = plt.subplots(figsize=(10, 6))
     fig.patch.set_facecolor('white')
 
-    norm = TwoSlopeNorm(vmin=prices.min(), vcenter=current_price, vmax=prices.max())
+    if prices.shape != (len(growth_rates), len(wacc_rates)) or not np.isfinite(prices).all():
+        raise ValueError('prices must be a finite growth-by-WACC matrix')
+    low, high = float(prices.min()), float(prices.max())
+    pad = max(high - low, abs(low), abs(high), abs(current_price or 0), 1) * 0.05
+    if current_price is not None:
+        if not np.isfinite(current_price):
+            raise ValueError('current_price must be finite')
+        norm = TwoSlopeNorm(vmin=min(low, current_price - pad),
+                            vcenter=current_price, vmax=max(high, current_price + pad))
+    else:
+        norm = Normalize(vmin=low - pad, vmax=high + pad)
     im = ax.imshow(prices, cmap='RdYlGn', norm=norm, aspect='auto')
 
     for i in range(len(growth_rates)):
         for j in range(len(wacc_rates)):
             val = prices[i, j]
-            color = 'white' if abs(val - current_price) > (prices.max() - prices.min()) * 0.3 else COLORS['darkText']
-            ax.text(j, i, f'${val:.0f}', ha='center', va='center',
+            rgba = im.cmap(norm(val))
+            luminance = 0.2126 * rgba[0] + 0.7152 * rgba[1] + 0.0722 * rgba[2]
+            color = 'white' if luminance < 0.5 else COLORS['darkText']
+            ax.text(j, i, f'{currency} {val:,.2f}', ha='center', va='center',
                     fontsize=FONT['bar_text'], fontweight='bold', color=color)
 
     ax.set_xticks(range(len(wacc_rates)))
@@ -478,11 +446,11 @@ def generate_dcf_heatmap(data, output_path):
     ax.set_xlabel(data.get('x_label', 'WACC (Discount Rate)'), fontsize=FONT['axis_label'], color=COLORS['gray'])
     ax.set_ylabel(data.get('y_label', 'Terminal Growth Rate'), fontsize=FONT['axis_label'], color=COLORS['gray'])
 
-    display_title = f'{title} (Current: ${current_price})' if current_price else title
+    display_title = f'{title} (Current: {currency} {current_price:,.2f})' if current_price is not None else title
     ax.set_title(display_title, fontsize=FONT['title'], fontweight='bold', color=COLORS['navy'], pad=18)
 
     cbar = plt.colorbar(im, ax=ax, shrink=0.8)
-    cbar.set_label('Implied Price ($)', fontsize=FONT['legend'])
+    cbar.set_label(f'Implied Price ({currency})', fontsize=FONT['legend'])
     cbar.ax.tick_params(labelsize=FONT['legend'] - 1)
 
     plt.tight_layout()
@@ -490,14 +458,15 @@ def generate_dcf_heatmap(data, output_path):
     plt.close(fig)
 
 
-# ─── Chart 9: Valuation Football Field ───
+# ─── Chart 8: Valuation Football Field ───
 
 def generate_football_field(data, output_path):
     """Horizontal range bar chart showing valuation ranges from multiple methodologies."""
     data = sanitize_data(data)
     verify_no_cjk(data, "football-field")
     methods = data.get('methods', [])
-    current_price = data.get('current_price', 0)
+    current_price = data.get('current_price')
+    currency = data.get('currency', 'USD')
     title = data.get('title', 'Valuation Football Field')
 
     FF_COLORS = ['#2E75B6', '#1B3A5C', '#27AE60', '#E67E22', '#8E44AD', '#7F8C8D', '#C0392B', '#F1C40F']
@@ -509,29 +478,35 @@ def generate_football_field(data, output_path):
     y_pos = np.arange(len(methods))
     all_lows = [m['low'] for m in methods]
     all_highs = [m['high'] for m in methods]
-    x_min = min(all_lows) * 0.88
-    x_max = max(all_highs) * 1.08
+    if any(lo > hi for lo, hi in zip(all_lows, all_highs)):
+        raise ValueError('Each valuation low must be <= high')
+    bounds = all_lows + all_highs + ([current_price] if current_price is not None else [])
+    if not np.isfinite(bounds).all():
+        raise ValueError('Valuation bounds and current_price must be finite')
+    low, high = min(bounds), max(bounds)
+    pad = max(high - low, abs(low), abs(high), 1) * 0.15
+    x_min, x_max = low - pad, high + pad
     label_offset = (x_max - x_min) * 0.02
 
     for i, m in enumerate(methods):
         lo, hi = m['low'], m['high']
         ax.barh(i, hi - lo, left=lo, height=0.5,
                 color=FF_COLORS[i % len(FF_COLORS)], alpha=0.75, zorder=2)
-        ax.text(lo - label_offset, i, f'${lo:.0f}', ha='right', va='center',
+        ax.text(lo - label_offset, i, f'{currency} {lo:,.2f}', ha='right', va='center',
                 fontsize=FONT['bar_text'] - 1, color=COLORS['darkText'])
-        ax.text(hi + label_offset, i, f'${hi:.0f}', ha='left', va='center',
+        ax.text(hi + label_offset, i, f'{currency} {hi:,.2f}', ha='left', va='center',
                 fontsize=FONT['bar_text'] - 1, color=COLORS['darkText'])
 
-    if current_price:
+    if current_price is not None:
         ax.axvline(x=current_price, color=COLORS['red'], linewidth=2.5,
-                   linestyle='--', zorder=3, label=f'Current Price ${current_price}')
+                   linestyle='--', zorder=3, label=f'Current Price {currency} {current_price:,.2f}')
         ax.legend(fontsize=FONT['legend'], loc='lower right', frameon=True)
 
     ax.set_yticks(y_pos)
     ax.set_yticklabels([m['name'] for m in methods], fontsize=FONT['tick_label'], color=COLORS['darkText'])
     ax.invert_yaxis()
     ax.set_xlim(x_min, x_max)
-    ax.set_xlabel('Implied Share Price ($)', fontsize=FONT['axis_label'], color=COLORS['gray'])
+    ax.set_xlabel(f'Implied Share Price ({currency})', fontsize=FONT['axis_label'], color=COLORS['gray'])
     ax.set_title(title, fontsize=FONT['title'], fontweight='bold', color=COLORS['navy'], pad=18)
     ax.grid(axis='x', alpha=0.3)
     ax.spines['top'].set_visible(False)
@@ -547,7 +522,6 @@ def generate_football_field(data, output_path):
 # ─── Data Validation ───
 
 REQUIRED_FIELDS = {
-    'hurdle-scorecard': {'hurdles': list},
     'financial-trends': {'years': list, 'series': list},
     'valuation-compare': {'items': list},
     'scenario-payoff': {'scenarios': list},
@@ -559,7 +533,6 @@ REQUIRED_FIELDS = {
 }
 
 ITEM_FIELDS = {
-    'hurdle-scorecard': ('hurdles', ['name', 'verdict']),
     'financial-trends': ('series', ['name', 'values']),
     'valuation-compare': ('items', ['name', 'value']),
     'scenario-payoff': ('scenarios', ['name', 'return_pct']),
@@ -594,7 +567,6 @@ def validate_data(chart_type, data):
 
 # ─── CLI Entry ───
 GENERATORS = {
-    'hurdle-scorecard': generate_hurdle_scorecard,
     'financial-trends': generate_financial_trends,
     'valuation-compare': generate_valuation_compare,
     'scenario-payoff': generate_scenario_payoff,
@@ -636,7 +608,6 @@ if __name__ == '__main__':
             print(f'  - {err}')
         print(f'\nExpected format for "{chart_type}":')
         expected = {
-            'hurdle-scorecard': '{ "hurdles": [{"name": "...", "verdict": "Pass|Fail", "score": "..."}], "title": "..." }',
             'financial-trends': '{ "years": [...], "series": [{"name": "...", "values": [...], "color": "#..."}], "title": "..." }',
             'valuation-compare': '{ "items": [{"name": "...", "value": 123, "color": "#..."}], "title": "...", "unit": "x" }',
             'scenario-payoff': '{ "scenarios": [{"name": "...", "probability": 50, "return_pct": 15, "color": "#..."}], "title": "..." }',

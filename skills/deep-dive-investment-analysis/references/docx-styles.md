@@ -74,7 +74,7 @@ new TextRun({ text: "自由现金流 (Free Cash Flow) 达到 $12.5B" })
 
 // Caption text — override size and style only, font inherited
 new TextRun({
-  text: "图 1: 投资筛选评分卡 (Figure 1: Investment Hurdle Scorecard)",
+  text: "图 1: 估值区间 (Figure 1: Valuation Range)",
   size: 20,      // 10pt
   italics: true,
   color: "7F8C8D",
@@ -113,15 +113,15 @@ Half-point values shown in parentheses (docx-js `size` unit).
 
 | Purpose | Hex | Usage |
 |---------|-----|-------|
-| Primary (Navy) | `#1B3A5C` | Section titles, cover, Analyst claims |
+| Primary (Navy) | `#1B3A5C` | Section titles, cover, key findings |
 | Accent (Blue) | `#2E75B6` | Subsection titles, links |
-| Alert (Red) | `#C0392B` | Risk/Fail indicators, RMO challenges, Kill Switch |
-| Success (Green) | `#27AE60` | Pass indicators, survived claims |
-| Neutral (Gray) | `#7F8C8D` | Captions, secondary text, concessions |
+| Alert (Red) | `#C0392B` | Downside risks, thesis invalidation |
+| Success (Green) | `#27AE60` | Supported upside, favorable evidence |
+| Neutral (Gray) | `#7F8C8D` | Captions, secondary text, uncertainty |
 | Dark Text | `#333333` | Body text |
 | Light Gray BG | `#F5F5F5` | Alternating table rows |
-| Light Green BG | `#E8F5E9` | Pass cells in tables |
-| Light Red BG | `#FFEBEE` | Fail cells in tables |
+| Light Green BG | `#E8F5E9` | Favorable scenario cells |
+| Light Red BG | `#FFEBEE` | Adverse scenario cells |
 
 ## Table Formatting
 
@@ -149,9 +149,9 @@ new TableCell({
 // Even rows: no shading (white)
 // Odd rows:  shading: { fill: "F5F5F5", type: ShadingType.CLEAR }
 
-// Pass/Fail conditional cells
-// Pass: shading: { fill: "E8F5E9", type: ShadingType.CLEAR }
-// Fail: shading: { fill: "FFEBEE", type: ShadingType.CLEAR }
+// Favorable/adverse scenario cells
+// Favorable: shading: { fill: "E8F5E9", type: ShadingType.CLEAR }
+// Adverse: shading: { fill: "FFEBEE", type: ShadingType.CLEAR }
 ```
 
 ## Cover Page Layout
@@ -197,7 +197,7 @@ new TableCell({
       alignment: AlignmentType.CENTER,
       spacing: { before: 200 },
       children: [new TextRun({
-        text: "Chen Research (Investment Analyst) & Leslie (Risk Officer)",
+        text: "Chen Research",
         size: 24,  // 12pt
         color: "333333",
       })]

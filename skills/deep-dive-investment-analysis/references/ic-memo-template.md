@@ -1,15 +1,14 @@
 # IC Memo Master Template Reference
 
-This template defines the exact structure for the institutional-grade IC Memo.
-Follow section numbering exactly. Each section maps to a specific analytical function.
+Use this structure for a Buy IC Memo. Preserve the main section order and numbering where applicable; omit or merge optional material that does not affect the decision and renumber cleanly. Apply the current valuation handbook through SKILL.md. Present conclusions and evidence.
 
 ## Section 0: Cover Page
 
 Required fields (formatted as a styled cover page, not body text):
 - **Title**: `{Asset / Theme} IC Memo`
 - **Ticker / Universe**: The asset identifier (e.g., NVDA, HBM, SPY)
-- **Date / Time / Timezone**: `YYYY-MM-DD, HH:MM, PT`
-- **Author**: `Chen Research (Investment Analyst) & Leslie (Risk Officer)`
+- **Date / Time / Timezone**: `YYYY-MM-DD, HH:MM, actual timezone`
+- **Author**: `Chen Research` (or the user-specified author)
 - **Classification**: `CONFIDENTIAL — Internal Use Only`
 
 Design: Center-aligned, use the primary navy color (#1B3A5C) for title, add a horizontal rule separator. Include a subtitle line with ticker and date.
@@ -19,11 +18,11 @@ Design: Center-aligned, use the primary navy color (#1B3A5C) for title, add a ho
 This is the most critical section — it must be scannable in 30 seconds.
 
 ### 1.1 One-line Call
-Format: `【决策】: Buy / Add / Hold / Reduce / Hedge / Avoid`
+Format: `【决策】: Buy (with Add or another position action only if requested)`
 One sentence maximum explaining the conviction.
 
 ### 1.2 Position Intent
-Present as a compact table:
+If execution or portfolio guidance is requested, present as a compact table; otherwise state only the research horizon and omit unsupported sizing or instrument recommendations:
 
 | 维度 (Dimension) | 建议 (Recommendation) |
 |---|---|
@@ -32,56 +31,17 @@ Present as a compact table:
 | 仓位规模 (Sizing) | Starter / Core / Max |
 | 风险预算 (Risk Budget) | X bps or % NAV |
 
-### 1.3 What Must Be True (论点成立的三个必要条件)
-Exactly 3 claims, each as a numbered bullet with clear, testable criteria.
+### 1.3 What Must Be True (论点成立的必要条件)
+List the few decisive claims with observable, testable conditions; do not force an exact count.
 
-### 1.4 Kill Switch (止损触发条件)
+### 1.4 Thesis Invalidation (论点失效条件)
 Split into:
-- **硬性失效 (Hard Invalidation)**: Specific price level / fundamental break / policy change
+- **硬性失效 (Hard Invalidation)**: Fundamental break / financing failure / policy change tied to the model; add price-based stops only when execution analysis is requested
 - **软性失效 (Soft Invalidation)**: Signal drift / adoption stall / spread widening
 
-### 1.5 Investment Debate Minutes (投资辩论纪要)
+### 1.5 Valuation and Residual Uncertainty (估值与剩余不确定性)
 
-This section documents the adversarial debate process between the Investment Analyst and the Risk Management Officer. It is the core differentiator of this report — it shows the reader how the final verdict was stress-tested through rigorous intellectual combat.
-
-#### 1.5.1 Analyst's Core Thesis (分析师核心论点)
-Present 3–5 numbered propositions that form the investment thesis. Each claim must be specific and testable — not vague directional statements.
-
-Format:
-- **Claim 1**: [Specific assertion with supporting evidence]
-- **Claim 2**: [Specific assertion with supporting evidence]
-- **Claim 3**: [Specific assertion with supporting evidence]
-- (Up to 5 claims)
-
-#### 1.5.2 RMO Challenge (风控官逐条质疑)
-For each claim above, the RMO provides a specific, evidence-backed challenge. This is NOT a token exercise — each challenge should genuinely attempt to break the claim.
-
-For each challenge, address:
-- What could go wrong with this claim?
-- What assumption is most fragile?
-- What data or event would disprove it?
-- Historical analogy where a similar thesis failed?
-
-#### 1.5.3 Analyst Response & Concessions (分析师回应与让步)
-The Analyst responds to each RMO challenge. Responses should be honest:
-- **Survived**: The claim holds — explain why the RMO's concern, while valid in theory, does not apply here or is already mitigated
-- **Modified**: The claim is adjusted — explain what changed and the revised version
-- **Conceded**: The concern is valid and unresolvable — acknowledge it as a residual risk
-
-#### 1.5.4 Debate Scorecard (辩论记分卡)
-Present as a summary table:
-
-| # | Analyst Claim | RMO Challenge | Outcome | Notes |
-|---|---------------|---------------|---------|-------|
-| 1 | [claim summary] | [challenge summary] | Survived / Modified / Abandoned | [key takeaway] |
-| 2 | ... | ... | ... | ... |
-
-#### 1.5.5 Final Ruling (最终裁定)
-- **Verdict**: Buy / Pass
-- **Confidence Level**: High / Medium / Low (with justification)
-- **Surviving thesis**: The refined version of the investment case after debate
-- **Key residual risk**: The most important concern that the debate could not fully resolve
-- **What would change the verdict**: Specific conditions under which the opposite conclusion would be warranted
+Summarize the current price, valuation date, conditional per-share value range, return horizon, margin of safety and most important unresolved risk. Explain briefly what would change the verdict. Support these figures in Sections 6 and 7.
 
 ## Section 2: The Setup (背景设定)
 
@@ -93,14 +53,14 @@ Present as a summary table:
 - Pricing object: growth / margin / duration / risk premium / narrative fragility
 - Immediate transmission: flows, vol, positioning, cross-asset linkages
 
-### 2.3 What the Tape Says (市场技术面信号)
+### 2.3 What the Tape Says (市场技术面信号，按需)
 - Price path: T0, T+1, T+1w
 - Vol/skew: IV, skew, term structure
 - Flows: CTA, passive, HF de-grossing, retail
 
 ## Section 3: GRDS Lens (系统分析框架)
 
-The analytical backbone — ensures the memo is "system-first" not "news-first."
+Use the lenses that explain the company and its industry; omit unsupported or irrelevant lenses. Connect each retained mechanism to operating drivers, duration, capital requirements or risk.
 
 ### 3.1 Game Theory (博弈论分析)
 - Who are the players? (Gov, hyperscalers, suppliers, rivals, regulators)
@@ -125,18 +85,18 @@ The analytical backbone — ensures the memo is "system-first" not "news-first."
 ## Section 4: Alpha Protocol (阿尔法策略)
 
 ### 4.1 Consensus Snapshot (市场共识概览)
-What the market thinks. What is already priced. The "easy story."
+Separate dated, sourced analyst consensus from price-implied assumptions and this research hypothesis. If analyst consensus evidence is unavailable, state that limitation. Reverse valuation may produce several feasible assumption combinations.
 
-### 4.2 Consensus Trap (共识陷阱)
-- The narrative mistake
+### 4.2 Potential Consensus Gap (可能的共识遗漏)
+- Is there an evidence-supported narrative mistake?
 - What variable is being linearized that is actually non-linear?
 - What is being ignored because it is hard to model?
 
 ### 4.3 Variant View (差异化观点)
-1–2 paragraphs of your non-consensus claim. Why now — timing catalyst or mispricing window.
+Explain a supported difference, its per-share value effect and falsifier. Accept that consensus is reasonable or no edge is identifiable; do not invent a contrary view. Explain the realization path and horizon when a gap exists.
 
 ### 4.4 Alpha Source (阿尔法来源)
-Pick the primary edge source:
+If an edge is supported, identify its primary source; otherwise state that no identifiable edge was established:
 - Information (faster / broader / higher signal)
 - Interpretation (better causal model)
 - Positioning (others forced / crowded)
@@ -147,15 +107,17 @@ Pick the primary edge source:
 - "Right" milestones over time
 - "Wrong" early warning signs
 
-## Section 5: Key Output Deliverables (核心交付物)
+## Section 5: Key Findings and Evidence (核心发现与证据)
 
-### 5.1 Basic Outputs (基础分析)
-1. Coverage sweep (news, filings, transcripts, research)
-2. Fact table extraction (numbers, dates, quotes)
-3. Scenario grid (base/bull/bear + sensitivities)
+Present decision-relevant findings and source-backed facts, not a checklist of work performed. Summarize material alternative explanations and why the adopted interpretation is better supported; avoid repeating other sections.
+
+### 5.1 Decision-Relevant Evidence (关键证据)
+1. Findings supported by filings, transcripts and relevant developments
+2. Material facts with dates, definitions and sources
+3. Key scenario implications, referring to Section 7 for calculations
 4. Counterarguments (steelman the bear case)
 
-### 5.2 Advanced Outputs (高阶分析)
+### 5.2 Structural Findings (结构性发现，按需)
 1. Structural break detection (per Appendix checklist)
 2. Incentive reading: political theater vs. real constraints
 3. Second-order expectations: who reacts to whom (Reflexivity)
@@ -168,11 +130,14 @@ Pick the primary edge source:
 - Capital intensity
 - Competitive moat / decay rate
 
-### 6.2 Bottleneck Map (瓶颈图谱)
+### 6.2 Valuation Method and Shareholder Bridge (估值方法与每股归属)
+Explain method choice and relevant limits using the current handbook. Reconcile normalized earnings, reinvestment, competitive duration and financing to shareholder value. Show material inputs, sources, formulas, units, dates and diluted shares. Use a full EV-to-equity bridge where applicable, or the corresponding shareholder reconciliation for other methods. Use cross-checks only when they reveal a meaningful blind spot.
+
+### 6.3 Bottleneck Map (瓶颈图谱)
 - What limits growth? (e.g., HBM, CoWoS, power, export controls, talent)
 - Substitutes and switching costs
 
-### 6.3 Regime Sensitivities (宏观敏感性)
+### 6.4 Regime Sensitivities (宏观敏感性)
 - Rates / real yields
 - FX exposure
 - Policy sensitivity
@@ -181,22 +146,34 @@ Pick the primary edge source:
 ## Section 7: Scenarios and Payoff Map (情景分析与收益图谱)
 
 ### 7.1 Scenario Table (情景表)
-Present as a formatted table:
+Present coherent scenarios as a formatted table. The rows below are examples; adapt them to the company. Distinguish present value from future target price and identify the return horizon. Show the operating, investment, financing and dilution assumptions that produce each result. Include probabilities only when defensible, labeled as estimates; otherwise omit the probability column.
 
-| 情景 (Scenario) | 概率 (Prob) | 目标价 (Target) | 回报 (Return) | 关键假设 (Key Assumptions) |
-|---|---|---|---|---|
-| 牛市 (Bull) | X% | $XXX | +XX% | ... |
-| 基准 (Base) | X% | $XXX | +XX% | ... |
-| 熊市 (Bear) | X% | $XXX | -XX% | ... |
+| 情景 (Scenario) | 每股现值与估值日 (Present Value / As-of Date) | 相对现值折价 (Discount to Value) | 关键假设 (Key Assumptions) |
+|---|---|---|---|
+| 上行情景 (Upside) | [币种、金额、日期] | [计算值] | [经营、资本、融资与股数假设] |
+| 基准情景 (Base) | [币种、金额、日期] | [计算值] | [同口径假设] |
+| 下行情景 (Downside) | [币种、金额、日期] | [计算值] | [失败损失及融资影响] |
+
+Discount to positive present value V is `(V - current price) / V`; it is not a holding-period return. If V is zero or negative, omit the percentage and explain the absolute value gap. If quoting upside relative to price instead, label `(V - current price) / current price` separately.
+
+When future price outcomes can be supported, add a separate table:
+
+| 情景 (Scenario) | 未来每股目标价与日期 (Future Price / Date) | 期间分配 (Distributions) | 持有期总回报 (Holding-period Total Return) |
+|---|---|---|---|
+| [对应情景] | [币种、金额、日期] | [同币种现金分配及假设] | [(未来价格 + 期间分配 - 买入价) / 买入价] |
+
+Label this simple return as before fees/taxes and without reinvestment; use an explicit cash-flow/IRR calculation when timing or reinvestment matters. State the horizon and any annualization separately. Use scenario return rather than probability-weighted expected return for individual rows. Add probabilities only when defensible. Do not infer a future target price or return directly from today's discounted value.
 
 ### 7.2 Payoff Shapes (收益形态)
 - Linear vs. convex payoff structure
 - Left tail and right tail risk assessment
 
 ### 7.3 Probabilities (概率估计)
-State confidence level and what would update the probabilities.
+If probabilities are used, explain their basis, uncertainty and update conditions. Otherwise explain the bounds of the scenario range. Analyze the dominant sensitivities and combinations that reverse the decision; a DCF heatmap is useful only when DCF is appropriate.
 
-## Section 8: Trade Construction (交易构建)
+## Section 8: Trade Construction (交易构建，按需)
+
+Include only when the user requests execution or portfolio guidance. Do not infer sizing from valuation alone. If omitted, retain valuation-based reconsideration conditions in the decision and monitoring sections.
 
 ### 8.1 Primary Expression (主要交易工具)
 Instrument + rationale for selection
@@ -222,13 +199,17 @@ Categorize as: Fundamental / Policy / Positioning / Liquidity
 - What is the "model blind spot"?
 
 ### 9.3 Monitoring Dashboard (监控仪表盘)
-List 5–10 specific, trackable variables with thresholds.
+List the few decision-relevant observable facts, timeframe and model-linked thresholds. Use directional and persistence conditions when numeric thresholds lack support.
 
 ## Appendix: Structural Break Checklist (结构性变化检查清单)
 
-5 diagnostic questions:
+Optional diagnostic prompts; include findings only when relevant:
 1. Is this a new cost curve or just a new headline? (成本曲线是否真正改变？)
 2. What constraint moved: compute, power, capital, policy, time? (什么约束条件发生了变化？)
 3. Does the stock price movement reflect narrative shift or emotional reaction? Is the market reacting to first-order facts or second-order fear? (股价反映的是叙事转变还是情绪反应？)
 4. Who is forced to trade here? (rules, VaR, CTA, passive) (谁在被动交易？)
 5. If consensus is wrong, where will it show up first? (data, orders, margins, capex) (如果共识错误，最先在哪里显现？)
+
+## Sources and Limitations
+
+Provide traceable sources for material claims and valuation inputs, their dates and unresolved gaps. Identify the handbook version used as methodology; it does not establish current company facts.
