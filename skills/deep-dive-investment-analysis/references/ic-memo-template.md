@@ -1,6 +1,6 @@
 # IC Memo Master Template Reference
 
-Use this structure for a Buy IC Memo. Preserve the main section order and numbering where applicable; omit or merge optional material that does not affect the decision and renumber cleanly. Apply the current valuation handbook through SKILL.md. Present conclusions and evidence.
+Use this structure for a Buy IC Memo. Preserve the main section order and numbering where applicable; omit or merge optional material that does not affect the decision and renumber cleanly. Present conclusions and evidence.
 
 ## Section 0: Cover Page
 
